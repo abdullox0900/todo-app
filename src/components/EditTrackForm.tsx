@@ -26,7 +26,7 @@ export function EditTrackForm({ track }: EditTrackFormProps) {
                 throw new Error('Title is required')
             }
 
-            const updatedTrack = await updateTrack({
+            await updateTrack({
                 ...track,
                 title: title.trim(),
                 authors: authors.split(',').map(a => a.trim()).filter(Boolean),

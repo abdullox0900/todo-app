@@ -38,7 +38,7 @@ export function getTracksList(): Track[] {
             try {
                 tracksStorage = JSON.parse(tracksInLocalStorage)
                 return tracksStorage
-            } catch (e) {
+            } catch {
                 localStorage.removeItem("tracks")
             }
         }

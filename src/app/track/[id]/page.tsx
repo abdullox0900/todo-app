@@ -4,7 +4,7 @@ import { EditTrackForm } from "@/components/EditTrackForm"
 import { getTrackById } from "@/lib/api"
 import { Track } from "@/lib/types"
 import { useParams, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 export default function EditTrack() {
     const params = useParams()
@@ -12,27 +12,27 @@ export default function EditTrack() {
     const [track, setTrack] = useState<Track | null>(null)
     const [isLoading, setIsLoading] = useState(true)
 
-    useEffect(() => {
-        if (params.id) {
-            loadTrack(params.id as string)
-        }
-    }, [params.id])
-
-    const loadTrack = async (id: string) => {
+    const loadTrack = useCallback(async (id: string) => {
         try {
             const trackData = await getTrackById(id)
             if (!trackData) {
-                router.push('/') // Redirect to home if track not found
+                router.push('/')
                 return
             }
             setTrack(trackData)
         } catch (error) {
             console.error('Failed to load track:', error)
-            router.push('/') // Redirect to home on error
+            router.push('/')
         } finally {
             setIsLoading(false)
         }
-    }
+    }, [router])
+
+    useEffect(() => {
+        if (params.id) {
+            loadTrack(params.id as string)
+        }
+    }, [params.id, loadTrack])
 
     if (isLoading) {
         return (

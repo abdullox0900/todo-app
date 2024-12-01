@@ -1,54 +1,22 @@
-import { getTrackById, getTracksList, saveTracks } from "./data"
+import { Track } from "./types"
 
-type EventCallback = (detail: any) => void
+export function initEvents(): void {
+    if (typeof window === 'undefined') return
 
-const events = {
-    toggleTrackStatus: "toggle-track-status",
-    removeTrack: "remove-track",
-}
-
-function initDispatchEvents() {
-    function dispatchEvent(eventName: string, detail: Record<string, any> = {}) {
-        const event = new CustomEvent(eventName, { detail })
-        document.dispatchEvent(event)
-    }
-    (window as any).dispatch = dispatchEvent
-}
-
-function addEvent(eventName: string, callback: EventCallback) {
-    document.addEventListener(eventName, (event) => {
-        if (event instanceof CustomEvent) {
-            callback(event.detail)
+    window.addEventListener('storage', (event: StorageEvent) => {
+        if (event.key === 'tracks') {
+            window.location.reload()
         }
     })
 }
 
-export function handleToggleTrackStatus(trackId: number) {
-    const track = getTrackById(trackId)
-    if (!track) return
-    track.like = !track.like
-    saveTracks()
-}
+export function dispatchStorageEvent(tracks: Track[]): void {
+    if (typeof window === 'undefined') return
 
-export function handleRemoveTrack(trackId: number) {
-    const track = getTrackById(trackId)
-    const trackList = getTracksList()
-    if (!track) return
-    const index = trackList.indexOf(track)
-    trackList.splice(index, 1)
-    saveTracks()
-}
+    const event = new StorageEvent('storage', {
+        key: 'tracks',
+        newValue: JSON.stringify(tracks)
+    })
 
-export function initEvents() {
-    initDispatchEvents()
-    addEvent(events.toggleTrackStatus, handleToggleTrackStatus)
-    addEvent(events.removeTrack, handleRemoveTrack)
-}
-
-export function dispatchToggleTrackStatus(trackId: number) {
-    return `window.dispatch?.call(null, '${events.toggleTrackStatus}', ${JSON.stringify({ trackId })})`
-}
-
-export function dispatchRemoveTrack(trackId: number) {
-    return `window.dispatch?.call(null, '${events.removeTrack}', ${JSON.stringify({ trackId })})`
+    window.dispatchEvent(event)
 } 
