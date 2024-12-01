@@ -1,7 +1,7 @@
 "use client"
 
-import { Layout } from "@/components/Layout"
 import { TracksList } from "@/components/TracksList"
+import { Layout } from "@/layout/Layout"
 import { initEvents } from "@/lib/events"
 import { useEffect } from "react"
 

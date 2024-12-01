@@ -1,7 +1,7 @@
 "use client"
 
+import { MoonIcon, SunIcon } from '@/icons'
 import { useEffect, useState } from 'react'
-import { MoonIcon, SunIcon } from './Icons'
 
 export function ThemeToggle() {
     const [mounted, setMounted] = useState(false)

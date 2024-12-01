@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zpotify - Музыкальная Коллекция
 
-## Getting Started
+## Описание проекта
 
-First, run the development server:
+Zpotify - это веб-приложение для управления музыкальной коллекцией, разработанное с использованием Next.js, TypeScript и Tailwind CSS. Приложение позволяет пользователям добавлять, редактировать и удалять треки, а также управлять их статусом "понравившихся".
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Основные функции
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Добавление новых треков
+- Редактирование существующих треков
+- Удаление треков
+- Фильтрация по авторам и статусу
+- Переключение темной/светлой темы
+- Управление статусом "понравившихся" треков
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Структура проекта
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Основные компоненты
 
-## Learn More
+src/
+├── app/ # Основные страницы приложения
+│ ├── page.tsx # Главная страница
+│ ├── layout.tsx # Корневой layout
+│ ├── globals.css # Глобальные стили
+│ └── track/[id]/ # Страница редактирования трека
+├── components/ # React компоненты
+│ ├── AddTrackForm.tsx # Форма добавления трека
+│ ├── EditTrackForm.tsx # Форма редактирования трека
+│ ├── FilterForm.tsx # Форма фильтрации
+│ ├── TrackCard.tsx # Карточка трека
+│ └── TracksList.tsx # Список треков
+├── layout/ # Компоненты layout
+│ └── Layout.tsx # Основной layout с темой
+├── icons/ # SVG иконки
+│ └── index.tsx # Экспорт иконок
+├── lib/ # Утилиты и API
+│ ├── api.ts # API функции
+│ └── types.tsx # TypeScript типы
 
-To learn more about Next.js, take a look at the following resources:
+### Layout (src/layout/Layout.tsx)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Управление темой приложения
+- Хранение состояния темы в localStorage
+- Переключение между темной и светлой темой
+- Использование React hooks: useState, useEffect
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### TracksList (src/components/TracksList.tsx)
 
-## Deploy on Vercel
+- Отображение списка треков
+- Сортировка треков по названию
+- Управление состоянием загрузки
+- Интеграция с формами фильтрации и добавления
+- Использование хуков: useState, useEffect, useMemo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### FilterForm (src/components/FilterForm.tsx)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Фильтрация по статусу "понравившихся"
+- Фильтрация по авторам
+- Сброс фильтров
+- Динамическое обновление списка авторов
+- Использование хуков: useState, useCallback
+
+### TrackCard (src/components/TrackCard.tsx)
+
+- Отображение информации о треке
+- Управление статусом "понравилось"
+- Удаление трека
+- Анимации при наведении
+- Оптимизация с помощью React.memo
+
+### AddTrackForm (src/components/AddTrackForm.tsx)
+
+- Добавление новых треков
+- Валидация формы
+- Обработка состояния загрузки
+- Очистка формы после добавления
+- Использование useRef для доступа к форме
+
+### EditTrackForm (src/components/EditTrackForm.tsx)
+
+- Редактирование существующих треков
+- Управление статусом "понравилось"
+- Валидация формы
+- Обработка ошибок
+- Использование useCallback и useEffect
+
+### Глобальные состояния
+
+- Тема приложения (светлая/темная)
+- Список треков
+- Состояние загрузки
+
+### Локальные состояния компонентов
+
+- Фильтры (выбранные авторы, статус)
+- Формы (значения полей, ошибки)
+- Состояния загрузки для кнопок
+- Состояния наведения для карточек
+
+## API Интеграция
+
+- GET /tracks - получение списка треков
+- POST /tracks - создание нового трека
+- PUT /tracks/:id - обновление трека
+- DELETE /tracks/:id - удаление трека
+
+## Стилизация
+
+- Использование Tailwind CSS
+- Кастомные цвета Spotify
+- Адаптивный дизайн
+- Темная тема
+- Анимации и переходы
+
+## Особенности реализации
+
+- Оптимизация производительности с помощью React.memo
+- Кэширование данных с помощью useMemo
+- Оптимизация колбэков с помощью useCallback
+- Управление побочными эффектами через useEffect
+- Типизация данных с помощью TypeScript
+- Стилизация с помощью Tailwind CSS
+- Адаптивный дизайн
+- Поддержка тёмной темы
+- Анимации и переходы
+
+## Используемые React Hooks
+
+- useState - управление состоянием компонентов
+- useEffect - побочные эффекты и жизненный цикл
+- useMemo - мемоизация вычислений
+- useCallback - мемоизация функций
+- useRef - доступ к DOM элементам
+- memo - оптимизация рендеринга
+
+## Технологии
+
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- React Hooks
+- MockAPI (для бэкенда)
+
+## Требования
+
+- Node.js 18.0 или выше
+- npm 9.0 или выше
