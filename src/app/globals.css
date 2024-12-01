@@ -3,19 +3,159 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #f9fafb;
+  --foreground: #101827;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  @apply bg-[#f9fafb] text-gray-900 transition-colors duration-200;
+}
+
+body.dark {
+  --background: #101827;
+  --foreground: #ffffff;
+  @apply bg-[#101827] text-gray-100;
+}
+
+/* Dark mode backgrounds */
+.dark .bg-gray-50,
+.dark .bg-white,
+.dark .bg-gray-800 {
+  background-color: #111111;
+}
+
+.dark .bg-gray-700 {
+  background-color: #1a1a1a;
+}
+
+/* Card styles in dark mode */
+.dark .card,
+.dark .bg-white {
+  background-color: #171717;
+  border-color: #2d2d2d;
+}
+
+/* Hover effects in dark mode */
+.dark .hover\:bg-gray-700:hover {
+  background-color: #1f1f1f;
+}
+
+.dark .hover\:bg-gray-600:hover {
+  background-color: #262626;
+}
+
+/* Form elements in dark mode */
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #171717;
+  border-color: #2d2d2d;
+  color: #ffffff;
+}
+
+.dark input:focus,
+.dark select:focus,
+.dark textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.dark input::placeholder {
+  color: #6b7280;
+}
+
+/* Button styles in dark mode */
+.dark .bg-blue-600 {
+  background-color: #2563eb;
+}
+
+.dark .hover\:bg-blue-700:hover {
+  background-color: #1d4ed8;
+}
+
+.dark .bg-gray-100 {
+  background-color: #171717;
+}
+
+.dark .hover\:bg-gray-200:hover {
+  background-color: #1f1f1f;
+}
+
+/* Text colors in dark mode */
+.dark .text-gray-600 {
+  color: #9ca3af;
+}
+
+.dark .text-gray-500 {
+  color: #6b7280;
+}
+
+.dark .text-gray-400 {
+  color: #9ca3af;
+}
+
+/* Shadows in dark mode */
+.dark .shadow-sm,
+.dark .shadow,
+.dark .shadow-md,
+.dark .shadow-lg {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Custom scrollbar for dark mode */
+.dark .custom-scrollbar {
+  scrollbar-color: #4b5563 #171717;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+  background: #171717;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280;
+}
+
+/* Gradient text in dark mode */
+.dark .bg-gradient-to-r {
+  background-image: linear-gradient(to right, #60a5fa, #a78bfa);
+}
+
+/* Hover transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Loading spinner in dark mode */
+.dark .animate-spin {
+  border-color: #3b82f6;
+}
+
+/* Card hover effects in dark mode */
+.dark .hover\:shadow-md:hover {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+}
+
+/* Button focus rings in dark mode */
+.dark .focus\:ring-2:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Error states in dark mode */
+.dark .bg-red-100 {
+  background-color: rgba(220, 38, 38, 0.1);
+}
+
+.dark .border-red-400 {
+  border-color: #ef4444;
+}
+
+.dark .text-red-700 {
+  color: #ef4444;
 }

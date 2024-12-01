@@ -4,13 +4,13 @@ export interface Track {
     authors: string[]
     like: boolean
     completed?: boolean
-    after?: any
+    after?: string
 }
 
 export interface ApiTrack {
     id: string
     title: string
     completed: boolean
-    after: any
+    after: string
     authors?: string | string[]
-} 
+}

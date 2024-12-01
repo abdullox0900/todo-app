@@ -45,25 +45,25 @@ export function EditTrackForm({ track }: EditTrackFormProps) {
     return (
         <div className="max-w-2xl mx-auto p-4">
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-bold">Edit Track</h1>
+                <h1 className="text-2xl font-bold">Редактировать трек</h1>
                 <button
                     onClick={() => router.push('/')}
                     className="px-4 py-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
                 >
-                    ← Back
+                    ← Назад
                 </button>
             </div>
 
             {error && (
                 <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-                    {error}
+                    {error === 'Title is required' ? 'Название трека обязательно' : 'Ошибка при обновлении трека'}
                 </div>
             )}
 
             <form className="space-y-4" onSubmit={handleSubmit}>
                 <div>
                     <label className="block text-sm font-medium mb-2">
-                        Title
+                        Название
                         <input
                             className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-blue-400"
                             type="text"
@@ -76,13 +76,13 @@ export function EditTrackForm({ track }: EditTrackFormProps) {
                 </div>
                 <div>
                     <label className="block text-sm font-medium mb-2">
-                        Authors
+                        Авторы
                         <input
                             className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-blue-400"
                             type="text"
                             value={authors}
                             onChange={(e) => setAuthors(e.target.value)}
-                            placeholder="Authors (comma separated)"
+                            placeholder="Авторы (через запятую)"
                             disabled={isLoading}
                         />
                     </label>
@@ -96,10 +96,10 @@ export function EditTrackForm({ track }: EditTrackFormProps) {
                         {isLoading ? (
                             <span className="flex items-center justify-center">
                                 <span className="animate-spin h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full"></span>
-                                Saving...
+                                Сохранение...
                             </span>
                         ) : (
-                            'Save Changes'
+                            'Сохранить'
                         )}
                     </button>
                     <button
@@ -108,7 +108,7 @@ export function EditTrackForm({ track }: EditTrackFormProps) {
                         className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                         disabled={isLoading}
                     >
-                        Cancel
+                        Отмена
                     </button>
                 </div>
             </form>
