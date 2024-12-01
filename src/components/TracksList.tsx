@@ -5,7 +5,7 @@ import { FilterForm } from "@/components/FilterForm"
 import { TrackCard } from "@/components/TrackCard"
 import { getTracks } from "@/lib/api"
 import { Track } from "@/lib/types"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 export function TracksList() {
   const [tracks, setTracks] = useState<Track[]>([])
@@ -33,17 +33,24 @@ export function TracksList() {
     setTracks(filteredTracks)
   }
 
+  const handleTrackUpdate = (updatedTrack: Track) => {
+    setTracks(tracks.map(track =>
+      track.id === updatedTrack.id ? updatedTrack : track
+    ))
+  }
+
+  const sortedTracks = useMemo(() => {
+    return [...tracks].sort((a, b) => a.title.localeCompare(b.title))
+  }, [tracks])
+
   if (!mounted) return null
 
   return (
-    <div className="max-w-5xl mx-auto p-4 min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="max-w-5xl mx-auto p-4 min-h-screen">
       <div className="mb-8 text-center">
         <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Zpotify
         </h1>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">
-          Управляйте своей музыкальной коллекцией
-        </p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-[300px,1fr]">
@@ -59,7 +66,7 @@ export function TracksList() {
 
         <div className="space-y-6">
           {showAddForm && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
+            <div className="bg-white dark:bg-[#282828] rounded-lg shadow-lg p-6 mb-6">
               <h2 className="text-xl font-semibold mb-4">Добавить новый трек</h2>
               <AddTrackForm
                 onAdd={(track) => {
@@ -89,13 +96,14 @@ export function TracksList() {
                   </button>
                 </div>
               ) : (
-                tracks.map((track: Track) => (
+                sortedTracks.map((track: Track) => (
                   <TrackCard
                     key={track.id}
                     track={track}
                     onDelete={() => {
                       setTracks(tracks.filter(t => t.id !== track.id))
                     }}
+                    onUpdate={handleTrackUpdate}
                   />
                 ))
               )}

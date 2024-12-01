@@ -2,18 +2,21 @@
 
 import { createTrack } from '@/lib/api'
 import { Track } from '@/lib/types'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 interface AddTrackFormProps {
     onAdd: (track: Track) => void
 }
 
 export function AddTrackForm({ onAdd }: AddTrackFormProps) {
+    const formRef = useRef<HTMLFormElement>(null)
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const form = e.currentTarget
+        const form = formRef.current
+        if (!form) return
+
         const formData = new FormData(form)
 
         const title = formData.get('title') as string
@@ -38,7 +41,7 @@ export function AddTrackForm({ onAdd }: AddTrackFormProps) {
     }
 
     return (
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form ref={formRef} className="space-y-4" onSubmit={handleSubmit}>
             <input
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-blue-400"
                 type="text"

@@ -1,6 +1,6 @@
 "use client"
 
-import { ThemeToggle } from "@/components/ThemeToggle"
+import { Layout } from "@/components/Layout"
 import { TracksList } from "@/components/TracksList"
 import { initEvents } from "@/lib/events"
 import { useEffect } from "react"
@@ -11,9 +11,8 @@ export default function Home() {
   }, [])
 
   return (
-    <>
-      <ThemeToggle />
+    <Layout>
       <TracksList />
-    </>
+    </Layout>
   )
 } 

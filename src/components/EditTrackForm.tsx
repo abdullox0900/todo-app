@@ -3,7 +3,7 @@
 import { updateTrack } from '@/lib/api'
 import { Track } from '@/lib/types'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 interface EditTrackFormProps {
     track: Track
@@ -14,9 +14,16 @@ export function EditTrackForm({ track }: EditTrackFormProps) {
     const [isLoading, setIsLoading] = useState(false)
     const [title, setTitle] = useState(track.title)
     const [authors, setAuthors] = useState(track.authors?.join(', ') || '')
+    const [like, setLike] = useState(track.like)
     const [error, setError] = useState('')
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    useEffect(() => {
+        setTitle(track.title)
+        setAuthors(track.authors?.join(', ') || '')
+        setLike(track.like)
+    }, [track])
+
+    const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setError('')
         setIsLoading(true)
@@ -30,6 +37,7 @@ export function EditTrackForm({ track }: EditTrackFormProps) {
                 ...track,
                 title: title.trim(),
                 authors: authors.split(',').map(a => a.trim()).filter(Boolean),
+                like
             })
 
             router.push('/')
@@ -40,7 +48,7 @@ export function EditTrackForm({ track }: EditTrackFormProps) {
         } finally {
             setIsLoading(false)
         }
-    }
+    }, [title, authors, like, track])
 
     return (
         <div className="max-w-2xl mx-auto p-4">
@@ -85,6 +93,20 @@ export function EditTrackForm({ track }: EditTrackFormProps) {
                             placeholder="Авторы (через запятую)"
                             disabled={isLoading}
                         />
+                    </label>
+                </div>
+                <div>
+                    <label className="block text-sm font-medium mb-2">
+                        Статус
+                        <select
+                            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-blue-400"
+                            value={like.toString()}
+                            onChange={(e) => setLike(e.target.value === 'true')}
+                            disabled={isLoading}
+                        >
+                            <option value="true">Понравившиеся</option>
+                            <option value="false">Не понравившиеся</option>
+                        </select>
                     </label>
                 </div>
                 <div className="flex gap-4">

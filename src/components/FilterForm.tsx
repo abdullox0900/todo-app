@@ -1,7 +1,8 @@
 "use client"
 
+import { getTracks } from '@/lib/api'
 import { Track } from '@/lib/types'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 interface FilterFormProps {
     onFilter: (tracks: Track[]) => void
@@ -14,7 +15,6 @@ export function FilterForm({ onFilter, tracks }: FilterFormProps) {
     const [likeStatus, setLikeStatus] = useState<'all' | 'true' | 'false'>('all')
     const [isLoading, setIsLoading] = useState(true)
 
-    // Tracks o'zgarganda authorlarni yangilash
     useEffect(() => {
         const uniqueAuthors = new Set<string>()
         tracks.forEach(track => {
@@ -36,15 +36,13 @@ export function FilterForm({ onFilter, tracks }: FilterFormProps) {
         setSelectedAuthors(newSelected)
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleFilter = useCallback(async (e: React.FormEvent) => {
         e.preventDefault()
         const filteredTracks = tracks.filter(track => {
-            // Like status filter
             if (likeStatus !== 'all' && String(track.like) !== likeStatus) {
                 return false
             }
 
-            // Authors filter
             if (selectedAuthors.size > 0) {
                 return track.authors.some(author => selectedAuthors.has(author))
             }
@@ -53,12 +51,22 @@ export function FilterForm({ onFilter, tracks }: FilterFormProps) {
         })
 
         onFilter(filteredTracks)
-    }
+    }, [likeStatus, selectedAuthors, tracks, onFilter])
 
-    const handleReset = () => {
-        setSelectedAuthors(new Set())
-        setLikeStatus('all')
-        onFilter(tracks)
+    const handleReset = async (e: React.MouseEvent) => {
+        e.preventDefault()
+        setIsLoading(true)
+        try {
+            setSelectedAuthors(new Set())
+            setLikeStatus('all')
+
+            const freshTracks = await getTracks()
+            onFilter(freshTracks)
+        } catch (error) {
+            console.error('Failed to reset filters:', error)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     if (isLoading) {
@@ -66,9 +74,9 @@ export function FilterForm({ onFilter, tracks }: FilterFormProps) {
     }
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+        <div className="bg-white dark:bg-[#282828] rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-semibold mb-6">Фильтры</h2>
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-6" onSubmit={handleFilter}>
                 <div>
                     <label className="block text-sm font-medium mb-2">Статус</label>
                     <select
@@ -103,15 +111,17 @@ export function FilterForm({ onFilter, tracks }: FilterFormProps) {
                     <button
                         type="submit"
                         className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                        disabled={isLoading}
                     >
-                        Применить
+                        {isLoading ? 'Загрузка...' : 'Применить'}
                     </button>
                     <button
                         type="button"
                         onClick={handleReset}
                         className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors"
+                        disabled={isLoading}
                     >
-                        Сбросить
+                        {isLoading ? 'Загрузка...' : 'Сбросить'}
                     </button>
                 </div>
             </form>
