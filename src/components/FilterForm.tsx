@@ -38,20 +38,29 @@ export function FilterForm({ onFilter, tracks }: FilterFormProps) {
 
     const handleFilter = useCallback(async (e: React.FormEvent) => {
         e.preventDefault()
-        const filteredTracks = tracks.filter(track => {
-            if (likeStatus !== 'all' && String(track.like) !== likeStatus) {
-                return false
-            }
+        setIsLoading(true)
+        try {
+            const freshTracks = await getTracks()
 
-            if (selectedAuthors.size > 0) {
-                return track.authors.some(author => selectedAuthors.has(author))
-            }
+            const filteredTracks = freshTracks.filter(track => {
+                if (likeStatus !== 'all' && String(track.like) !== likeStatus) {
+                    return false
+                }
 
-            return true
-        })
+                if (selectedAuthors.size > 0) {
+                    return track.authors.some(author => selectedAuthors.has(author))
+                }
 
-        onFilter(filteredTracks)
-    }, [likeStatus, selectedAuthors, tracks, onFilter])
+                return true
+            })
+
+            onFilter(filteredTracks)
+        } catch (error) {
+            console.error('Failed to fetch tracks:', error)
+        } finally {
+            setIsLoading(false)
+        }
+    }, [likeStatus, selectedAuthors, onFilter])
 
     const handleReset = async (e: React.MouseEvent) => {
         e.preventDefault()
