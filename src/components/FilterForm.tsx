@@ -38,7 +38,6 @@ export function FilterForm({ onFilter, tracks }: FilterFormProps) {
 
     const handleFilter = useCallback(async (e: React.FormEvent) => {
         e.preventDefault()
-        setIsLoading(true)
         try {
             const freshTracks = await getTracks()
 
@@ -57,8 +56,6 @@ export function FilterForm({ onFilter, tracks }: FilterFormProps) {
             onFilter(filteredTracks)
         } catch (error) {
             console.error('Failed to fetch tracks:', error)
-        } finally {
-            setIsLoading(false)
         }
     }, [likeStatus, selectedAuthors, onFilter])
 
