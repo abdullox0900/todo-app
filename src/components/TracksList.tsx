@@ -3,6 +3,7 @@
 import { AddTrackForm } from "@/components/AddTrackForm"
 import { FilterForm } from "@/components/FilterForm"
 import { TrackCard } from "@/components/TrackCard"
+import { ZpotifyIcon } from '@/icons'
 import { getTracks } from "@/lib/api"
 import { Track } from "@/lib/types"
 import { useEffect, useMemo, useState } from "react"
@@ -47,8 +48,9 @@ export function TracksList() {
 
   return (
     <div className="max-w-5xl mx-auto p-4 min-h-screen">
-      <div className="mb-8 text-center">
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+      <div className="flex items-center gap-[15px] mb-8 text-center">
+        <ZpotifyIcon />
+        <h1 className="text-[28px] font-bold dark:text-white">
           Zpotify
         </h1>
       </div>
